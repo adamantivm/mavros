@@ -8,12 +8,16 @@
 	<arg name="tgt_component" />
 	<arg name="blacklist_yaml" />
 	<arg name="config_yaml" />
+  <arg name="system_id" />
+  <arg name="component_id" />
 
 	<node pkg="mavros" type="mavros_node" name="mavros" required="true" clear_params="true" output="screen">
 		<param name="fcu_url" value="$(arg fcu_url)" />
 		<param name="gcs_url" value="$(arg gcs_url)" />
 		<param name="target_system_id" value="$(arg tgt_system)" />
 		<param name="target_component_id" value="$(arg tgt_component)" />
+		<param name="system_id" value="$(arg system_id)" />
+		<param name="component_id" value="$(arg component_id)" />
 
 		<!-- load blacklist, config -->
 		<rosparam command="load" file="$(arg blacklist_yaml)" />

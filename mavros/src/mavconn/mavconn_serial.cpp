@@ -116,13 +116,19 @@ void MAVConnSerial::send_message(const mavlink_message_t *message, uint8_t sysid
 		return;
 	}
 
-	ROS_DEBUG_NAMED("mavconn", "serial%d:send: Message-Id: %d [%d bytes]", channel, message->msgid, message->len);
+	ROS_DEBUG_NAMED("mavconn", "serial%d:send: Message-Id: %d [%d bytes], SysId: %d, CompId: %d",
+      channel, message->msgid, message->len, sysid, compid);
 
 	MsgBuffer *buf = new_msgbuffer(message, sysid, compid);
 	{
 		lock_guard lock(mutex);
 		tx_q.push_back(buf);
 	}
+  if(message->msgid == 70) {
+	  ROS_INFO_NAMED("mavconn", "serial%d:send: Message-Id: %d [%d bytes], SysId: %d, CompId: %d",
+      channel, message->msgid, message->len, sysid, compid);
+    buf->debug_print();
+  }
 	io_service.post(boost::bind(&MAVConnSerial::do_write, this, true));
 }
 
